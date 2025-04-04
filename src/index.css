@@ -1,0 +1,76 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border antialiased;
+  }
+  body {
+    @apply bg-[#f3f3f3] text-brutalist-black font-mono;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Brutalist component utilities */
+.brutal-card {
+  @apply border-4 border-brutalist-black bg-white shadow-brutal hover:shadow-brutal-hover transition-shadow duration-200;
+}
+
+.brutal-button {
+  @apply border-4 border-brutalist-black bg-brutalist-yellow px-4 py-2 shadow-brutal hover:shadow-brutal-hover hover:-translate-y-1 transition-all duration-200 font-bold uppercase text-brutalist-black;
+}
+
+.brutal-button-primary {
+  @apply brutal-button bg-brutalist-red text-white;
+}
+
+.brutal-button-secondary {
+  @apply brutal-button bg-brutalist-green;
+}
+
+.brutal-button-accent {
+  @apply brutal-button bg-brutalist-blue text-white;
+}
+
+.brutal-input {
+  @apply border-4 border-brutalist-black bg-white px-4 py-2 focus:border-brutalist-blue focus:outline-none focus:ring-0;
+}
+
+.brutal-select {
+  @apply brutal-input appearance-none pr-8;
+}
+
+.brutal-label {
+  @apply font-bold uppercase text-sm tracking-wider;
+}
+
+.brutal-badge {
+  @apply bg-brutalist-red text-white px-2 py-1 font-bold text-xs uppercase border-2 border-brutalist-black shadow-brutal-sm;
+}
