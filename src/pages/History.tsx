@@ -103,7 +103,7 @@ const History = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f3f3f3] p-6 flex items-center justify-center">
-        <div className="loader animate-spin h-12 w-12 border-4 border-brutalist-black border-t-transparent rounded-full"></div>
+        <div className="loader animate-spin h-12 w-12 border-1 border-t-transparent rounded-full"></div>
       </div>
     );
   }
@@ -111,7 +111,7 @@ const History = () => {
   return (
     <div className="min-h-screen bg-[#f3f3f3] flex flex-col">
       {/* Header */}
-      <div className="p-6 border-b-4 border-brutalist-black flex items-center justify-between bg-white">
+      <div className="p-6 border-b-4 flex items-center justify-between bg-white">
         <h1 className="text-4xl font-black uppercase tracking-tighter">
           <a href="/">ESC Labs</a>
         </h1>
@@ -135,16 +135,16 @@ const History = () => {
       <div className="flex-1 p-6">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex items-center justify-center w-12 h-12 bg-brutalist-blue border-4 border-brutalist-black text-white text-xl font-black shadow-brutal-sm">
+            <div className="flex items-center justify-center w-12 h-12 bg-brutalist-blue border-1 border-brutalist-black text-white text-xl font-black shadow-brutal-sm">
               <Clock className="w-6 h-6" />
             </div>
             <h2 className="text-3xl font-black uppercase tracking-tighter">Your Voice History</h2>
           </div>
           
-          <div className="p-6 border-4 border-brutalist-black bg-white shadow-brutal">
+          <div className="p-6 border-1 border-brutalist-black bg-white shadow-brutal">
             {isLoadingClones ? (
               <div className="flex justify-center py-10">
-                <div className="loader animate-spin h-10 w-10 border-4 border-brutalist-black border-t-transparent rounded-full"></div>
+                <div className="loader animate-spin h-10 w-10 border-1 border-brutalist-black border-t-transparent rounded-full"></div>
               </div>
             ) : voiceClones.length === 0 ? (
               <div className="text-center py-10">

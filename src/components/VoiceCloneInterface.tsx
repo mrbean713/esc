@@ -14,6 +14,7 @@ import AuthModal from './auth/AuthModal';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RainbowButton } from '@/components/magicui/rainbow-button';
 
 interface VoiceClone {
   id: string;
@@ -222,18 +223,18 @@ const VoiceCloneInterface = () => {
   };
   
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div className="flex flex-col gap-8 w-[40%] mx-auto py-12">
       {/* Left column - Voice Input */}
       <div className="lg:col-span-7 space-y-8">
         <div className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="flex items-center justify-center w-12 h-12 bg-brutalist-red border-4 border-brutalist-black text-white text-xl font-black shadow-brutal-sm">
+            <div className="flex items-center justify-center w-12 h-12 border-2 rounded-full text-black text-xl font-black">
               1
             </div>
-            <h2 className="text-3xl font-black uppercase tracking-tighter">Record Your Voice</h2>
+            <h2 className="text-3xl font-black tracking-tighter">Record your voice</h2>
           </div>
           
-          <div className="p-6 border-4 border-brutalist-black bg-white shadow-brutal">
+          <div className="p-6 border border-gray-100 rounded-xl shadow-md shadow-gray-100 bg-white">
             <VoiceRecorderPanel 
               onAudioReady={handleAudioReady} 
               cloneMode="stability"
@@ -245,13 +246,13 @@ const VoiceCloneInterface = () => {
       {/* Right column - Details and TTS */}
       <div className="lg:col-span-5 space-y-6">
         <div className="flex items-center gap-3 mb-2">
-          <div className="flex items-center justify-center w-12 h-12 bg-brutalist-purple border-4 border-brutalist-black text-white text-xl font-black shadow-brutal-sm">
+          <div className="flex items-center justify-center w-12 h-12 border-2 rounded-full text-black text-xl font-black">
             2
           </div>
-          <h2 className="text-3xl font-black uppercase tracking-tighter">Clone & Speak</h2>
+          <h2 className="text-3xl font-black tracking-tighter">Clone & speak</h2>
         </div>
         
-        <div className="p-6 border-4 border-brutalist-black bg-white shadow-brutal space-y-6">
+        <div className="p-6 border border-gray-100 rounded-xl shadow-md shadow-gray-100 bg-white space-y-6">
           {user && savedVoiceClones.length > 0 && (
             <div className="space-y-2">
               <Label className="brutal-label block">
@@ -276,8 +277,8 @@ const VoiceCloneInterface = () => {
           )}
           
           <div className="space-y-2">
-            <Label className="brutal-label block">
-              Clone Name <span className="text-brutalist-red">*</span>
+            <Label className="block">
+              Clone name <span className="text-brutalist-red">*</span>
             </Label>
             <Input 
               type="text"
@@ -287,22 +288,22 @@ const VoiceCloneInterface = () => {
                 if (e.target.value.trim()) setNameError('');
               }} 
               placeholder="My voice clone"
-              className={`brutal-input w-full ${nameError ? 'border-red-500' : ''}`}
+              className={`w-full ${nameError ? 'border-red-500' : ''}`}
             />
             {nameError && (
               <p className="text-sm text-red-500">{nameError}</p>
             )}
           </div>
           
-          <button 
+          <RainbowButton 
             onClick={handleCloneVoice}
             disabled={isProcessing || !audioBlob || voiceStatus === 'ready'}
-            className={`brutal-button-primary w-full py-4 text-lg ${
+            className={`w-full py-4 text-lg ${
               (isProcessing || !audioBlob || voiceStatus === 'ready') ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
             {isProcessing ? 'Processing...' : 'Clone Voice Now'}
-          </button>
+          </RainbowButton>
 
           {voiceStatus === 'processing' && (
             <div className="p-4 border-4 border-brutalist-black bg-brutalist-yellow">

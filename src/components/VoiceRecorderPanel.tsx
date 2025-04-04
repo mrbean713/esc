@@ -3,6 +3,7 @@ import { Mic, Square, Play } from 'lucide-react';
 import WaveSurfer from 'wavesurfer.js';
 import { cloneVoice } from '@/services/cartesiaApi';
 import { toast } from 'sonner';
+import { RainbowButton } from '@/components/magicui/rainbow-button';
 
 interface VoiceRecorderPanelProps {
   onAudioReady: (audioBlob: Blob) => void;
@@ -136,29 +137,29 @@ const VoiceRecorderPanel: React.FC<VoiceRecorderPanelProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="text-lg font-bold uppercase tracking-tighter">
+      <div className="text-lg font-bold tracking-tighter">
         {isRecording ? "Recording in progress..." : "Record a voice clip"}
       </div>
       
       {isRecording ? (
-        <button 
+        <RainbowButton 
           onClick={stopRecording} 
-          className="w-full border-4 border-brutalist-black bg-brutalist-red text-white px-6 py-4 font-black uppercase tracking-wide shadow-brutal hover:shadow-brutal-hover hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3"
+          className="w-full px-6 py-4 font-white tracking-wide flex items-center justify-center gap-3 bg-red-500"
         >
           <Square className="w-6 h-6" />
           Stop Recording
-        </button>
+        </RainbowButton>
       ) : (
-        <button 
+        <RainbowButton 
           onClick={startRecording} 
-          className="w-full border-4 border-brutalist-black bg-brutalist-red text-white px-6 py-4 font-black uppercase tracking-wide shadow-brutal hover:shadow-brutal-hover hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3"
+          className="w-full px-6 py-4 font-white tracking-wide flex items-center justify-center gap-3 bg-red-500"
         >
           <Mic className="w-6 h-6" />
           Record
-        </button>
+        </RainbowButton>
       )}
       
-      <div className="bg-brutalist-yellow border-4 border-brutalist-black p-4 font-bold text-center">
+      <div className="bg-gray-100 border-4 border-gray-100 rounded-xl p-4 font-bold text-center">
         {getRecommendedText()}
       </div>
       
@@ -166,12 +167,12 @@ const VoiceRecorderPanel: React.FC<VoiceRecorderPanelProps> = ({
         <div className="space-y-6">
           <div 
             ref={waveformDivRef} 
-            className="w-full border-4 border-brutalist-black bg-white p-4"
+            className="w-full border-4 border-gray-100 rounded-xl bg-white p-4"
           />
           
           <div className="flex justify-center">
             <button
-              className="border-4 border-brutalist-black bg-brutalist-blue text-white px-6 py-3 font-black uppercase tracking-wide shadow-brutal hover:shadow-brutal-hover hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3"
+              className="border-4 border-gray-100 rounded-xl text-white px-6 py-3 font-black uppercase tracking-wide shadow-brutal hover:shadow-brutal-hover hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3"
               onClick={isPlaying ? stopAudio : playAudio}
             >
               {isPlaying ? (

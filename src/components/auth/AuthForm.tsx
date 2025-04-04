@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { RainbowButton } from '@/components/magicui/rainbow-button';
 
 type AuthMode = 'signin' | 'signup';
 
@@ -55,46 +56,46 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSuccess }) => {
   };
 
   return (
-    <Card className="w-full max-w-md p-6 bg-white/90 border-4 border-brutalist-black shadow-brutal">
-      <h2 className="text-2xl font-black uppercase tracking-tighter mb-6">
-        {mode === 'signin' ? 'Sign In' : 'Create Account'}
+    <Card className="w-full max-w-md p-6 bg-white/90 border-none">
+      <h2 className="text-2xl font-black tracking-tighter mb-6">
+        {mode === 'signin' ? 'Sign in' : 'Create account'}
       </h2>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <label className="brutal-label block">Email</label>
+          <label className=" block">Email</label>
           <Input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="your@email.com"
-            className="brutal-input"
+            className=""
           />
         </div>
         
         <div className="space-y-2">
-          <label className="brutal-label block">Password</label>
+          <label className="block">Password</label>
           <Input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="••••••••"
-            className="brutal-input"
+            className=""
             minLength={6}
           />
         </div>
         
-        <Button 
+        <RainbowButton 
           type="submit"
-          className="w-full brutal-button-primary bg-brutalist-blue"
+          className="w-full"
           disabled={isLoading}
         >
           {isLoading 
             ? 'Processing...' 
             : mode === 'signin' ? 'Sign In' : 'Create Account'}
-        </Button>
+        </RainbowButton>
         
         <div className="text-center mt-4">
           <button 
