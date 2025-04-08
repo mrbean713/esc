@@ -1,29 +1,28 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface SignUpPromptProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  isOpen: boolean;
+  onClose: () => void;
   onSignUp: () => void;
 }
 
-const SignUpPrompt: React.FC<SignUpPromptProps> = ({ open, onOpenChange, onSignUp }) => {
+const SignUpPrompt: React.FC<SignUpPromptProps> = ({ isOpen, onClose, onSignUp }) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md max-w-[95vw] p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-black tracking-tighter">Save Your Voice Clone</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-xl sm:text-2xl font-black tracking-tighter">Save Your Voice Clone</DialogTitle>
+          <DialogDescription className="text-sm sm:text-base">
             Sign up to save your voice clone and access it anytime. Create unlimited voice clones and text-to-speech content.
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4 py-4">
+        <div className="space-y-3 py-2 sm:py-4">
           <div className="flex flex-col space-y-2">
-            <div className="bg-brutalist-green border-l-4 border-brutalist-black p-3">
-              <p className="font-bold">Your voice clone is ready! Sign up to keep it forever.</p>
+            <div className="bg-brutalist-green border-l-4 border-brutalist-black p-2 sm:p-3">
+              <p className="text-sm sm:text-base font-bold">Your voice clone is ready! Sign up to keep it forever.</p>
             </div>
           </div>
         </div>
@@ -31,13 +30,13 @@ const SignUpPrompt: React.FC<SignUpPromptProps> = ({ open, onOpenChange, onSignU
         <DialogFooter className="sm:justify-between flex-col sm:flex-row gap-2">
           <Button 
             variant="outline" 
-            onClick={() => onOpenChange(false)}
-            className="w-full sm:w-auto"
+            onClick={onClose}
+            className="w-full sm:w-auto text-sm sm:text-base py-2"
           >
             Maybe Later
           </Button>
           <Button 
-            className="w-full sm:w-auto brutal-button-primary bg-brutalist-blue"
+            className="w-full sm:w-auto bg-brutalist-blue text-sm sm:text-base py-2"
             onClick={onSignUp}
           >
             Create Free Account

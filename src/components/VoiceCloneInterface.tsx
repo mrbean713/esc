@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import VoiceRecorderPanel from './VoiceRecorderPanel';
 import { cloneVoice, generateSpeech, getVoiceStatus, speakWelcomeMessage } from '@/services/cartesiaApi';
@@ -223,18 +222,18 @@ const VoiceCloneInterface = () => {
   };
   
   return (
-    <div className="flex flex-col gap-8 w-[40%] mx-auto py-12">
+    <div className="flex flex-col gap-3 md:gap-8 w-full max-w-screen-sm mx-auto py-2 md:py-12 px-0 sm:px-3 md:px-4">
       {/* Left column - Voice Input */}
-      <div className="lg:col-span-7 space-y-8">
-        <div className="space-y-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex items-center justify-center w-12 h-12 border-2 rounded-full text-black text-xl font-black">
+      <div className="space-y-2 md:space-y-8">
+        <div className="space-y-2 md:space-y-6">
+          <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+            <div className="flex items-center justify-center w-6 h-6 md:w-12 md:h-12 border border-gray-400 rounded-full text-black text-sm md:text-xl font-black">
               1
             </div>
-            <h2 className="text-3xl font-black tracking-tighter">Record your voice</h2>
+            <h2 className="text-lg md:text-3xl font-black tracking-tighter">Record your voice</h2>
           </div>
           
-          <div className="p-6 border border-gray-100 rounded-xl shadow-md shadow-gray-100 bg-white">
+          <div className="p-2 sm:p-3 md:p-6 border border-gray-200 rounded-xl shadow-sm bg-white">
             <VoiceRecorderPanel 
               onAudioReady={handleAudioReady} 
               cloneMode="stability"
@@ -244,40 +243,37 @@ const VoiceCloneInterface = () => {
       </div>
       
       {/* Right column - Details and TTS */}
-      <div className="lg:col-span-5 space-y-6">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="flex items-center justify-center w-12 h-12 border-2 rounded-full text-black text-xl font-black">
+      <div className="space-y-2 md:space-y-6">
+        <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+          <div className="flex items-center justify-center w-6 h-6 md:w-12 md:h-12 border border-gray-400 rounded-full text-black text-sm md:text-xl font-black">
             2
           </div>
-          <h2 className="text-3xl font-black tracking-tighter">Clone & speak</h2>
+          <h2 className="text-lg md:text-3xl font-black tracking-tighter">Clone your voice</h2>
         </div>
         
-        <div className="p-6 border border-gray-100 rounded-xl shadow-md shadow-gray-100 bg-white space-y-6">
+        <div className="p-2 sm:p-3 md:p-6 border border-gray-200 rounded-xl shadow-sm bg-white space-y-3 md:space-y-6">
           {user && savedVoiceClones.length > 0 && (
-            <div className="space-y-2">
-              <Label className="brutal-label block">
-                Use Existing Clone
+            <div className="space-y-1 md:space-y-2">
+              <Label className="block text-sm md:text-base font-medium">
+                Select an existing voice clone
               </Label>
               <Select value={selectedSavedClone} onValueChange={handleSelectSavedClone}>
-                <SelectTrigger className="brutal-input w-full">
+                <SelectTrigger className="w-full text-sm md:text-base py-2">
                   <SelectValue placeholder="Select a saved voice clone" />
                 </SelectTrigger>
                 <SelectContent>
-                  {savedVoiceClones.map((clone) => (
-                    <SelectItem key={clone.id} value={clone.id}>
+                  {savedVoiceClones.map(clone => (
+                    <SelectItem key={clone.id} value={clone.id} className="text-sm md:text-base">
                       {clone.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <div className="text-xs text-gray-500 mt-1">
-                Or create a new clone below
-              </div>
             </div>
           )}
           
-          <div className="space-y-2">
-            <Label className="block">
+          <div className="space-y-1 md:space-y-2">
+            <Label className="block text-sm md:text-base font-medium">
               Clone name <span className="text-brutalist-red">*</span>
             </Label>
             <Input 
@@ -288,17 +284,17 @@ const VoiceCloneInterface = () => {
                 if (e.target.value.trim()) setNameError('');
               }} 
               placeholder="My voice clone"
-              className={`w-full ${nameError ? 'border-red-500' : ''}`}
+              className={`w-full text-sm md:text-base py-2 ${nameError ? 'border-red-500' : 'border-gray-200'}`}
             />
             {nameError && (
-              <p className="text-sm text-red-500">{nameError}</p>
+              <p className="text-xs md:text-sm text-red-500">{nameError}</p>
             )}
           </div>
           
           <RainbowButton 
             onClick={handleCloneVoice}
             disabled={isProcessing || !audioBlob || voiceStatus === 'ready'}
-            className={`w-full py-4 text-lg ${
+            className={`w-full py-2 md:py-4 text-sm md:text-lg ${
               (isProcessing || !audioBlob || voiceStatus === 'ready') ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
@@ -306,70 +302,72 @@ const VoiceCloneInterface = () => {
           </RainbowButton>
 
           {voiceStatus === 'processing' && (
-            <div className="p-4 border-4 border-brutalist-black bg-brutalist-yellow">
-              <p className="font-bold text-center">
+            <div className="p-2 md:p-4 border border-yellow-400 bg-yellow-100 rounded-lg">
+              <p className="text-xs md:text-base font-bold text-center text-yellow-800">
                 Voice clone is processing...
               </p>
             </div>
           )}
 
-          {playbackProgress > 0 && (
-            <div className="w-full space-y-1">
-              <Progress value={playbackProgress} className="h-3 w-full" />
-              <p className="text-xs text-gray-500 text-center">{Math.round(playbackProgress)}% complete</p>
-            </div>
-          )}
-
           {voiceStatus === 'ready' && (
-            <div className="space-y-4">
-              <div className="p-4 border-4 border-brutalist-black bg-brutalist-green">
-                <p className="font-bold text-center">
-                  Voice clone is ready!
-                </p>
+            <div className="space-y-3 md:space-y-6">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="flex items-center justify-center w-6 h-6 md:w-12 md:h-12 border border-gray-400 rounded-full text-black text-sm md:text-xl font-black">
+                  3
+                </div>
+                <h2 className="text-lg md:text-3xl font-black tracking-tighter">Generate speech</h2>
               </div>
               
-              <div className="space-y-2">
-                <Label className="brutal-label block">
-                  Text to Speech
+              <div className="space-y-2 md:space-y-4">
+                <Label className="block text-sm md:text-lg font-medium">
+                  Enter text to speak with your cloned voice
                 </Label>
-                <Textarea
-                  value={ttsText}
-                  onChange={(e) => setTtsText(e.target.value)}
-                  placeholder="Enter text for your voice to speak..."
-                  className="brutal-input w-full min-h-[100px]"
+                <Textarea 
+                  value={ttsText} 
+                  onChange={(e) => setTtsText(e.target.value)} 
+                  placeholder="Type something to say with your cloned voice..."
+                  className="min-h-[80px] md:min-h-[120px] text-sm md:text-base border-gray-200"
                 />
-              </div>
-              
-              <div className="flex gap-3">
+                
                 <Button 
                   onClick={handleTextToSpeech}
-                  disabled={isProcessing || voiceStatus !== 'ready'}
-                  className="flex-1"
+                  disabled={isProcessing}
+                  className="w-full bg-brutalist-red hover:bg-red-600 text-white flex items-center justify-center gap-1 md:gap-2 py-2 md:py-3 text-sm md:text-base font-medium"
                 >
-                  <Play className="w-4 h-4 mr-2" />
-                  Speak with My Voice
+                  {isProcessing ? (
+                    <>
+                      <RefreshCw className="w-3 h-3 md:w-5 md:h-5 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-3 h-3 md:w-5 md:h-5" />
+                      Speak with Cloned Voice
+                    </>
+                  )}
                 </Button>
                 
-                <Button
-                  variant="outline"
-                  onClick={resetVoiceClone}
-                  title="Create a new voice clone"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                </Button>
+                {playbackProgress > 0 && (
+                  <div className="w-full space-y-1">
+                    <Progress value={playbackProgress} className="h-2 md:h-3 w-full" />
+                    <p className="text-xs md:text-sm text-gray-500 text-center">{Math.round(playbackProgress)}% complete</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       </div>
-
-      <SignUpPrompt
-        open={showSignUpPrompt}
-        onOpenChange={setShowSignUpPrompt}
+      
+      {/* Sign up prompt modal */}
+      <SignUpPrompt 
+        isOpen={showSignUpPrompt} 
+        onClose={() => setShowSignUpPrompt(false)}
         onSignUp={handleSignUpPromptAction}
       />
-
-      <AuthModal
+      
+      {/* Auth modal */}
+      <AuthModal 
         open={showAuthModal}
         onOpenChange={setShowAuthModal}
       />

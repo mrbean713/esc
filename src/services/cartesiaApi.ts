@@ -1,4 +1,3 @@
-
 import { CartesiaClient, CartesiaError } from "@cartesia/cartesia-js";
 import { toast } from 'sonner';
 
@@ -18,18 +17,32 @@ export async function cloneVoice(audioBlob: Blob, name: string = 'My Voice Clone
     console.log('Audio blob size:', audioBlob.size, 'bytes');
     console.log('Audio blob type:', audioBlob.type);
 
-    // Create a File object from the Blob
-    const file = new File([new Uint8Array(arrayBuffer)], 'voice.wav', { type: 'audio/wav' });
+    // Check if the audio is too small (likely an error in recording)
+    if (audioBlob.size < 5000) { // 5KB minimum
+      toast.error('Audio recording is too short. Please record at least 5 seconds.');
+      return null;
+    }
+
+    // Create a File object from the Blob with proper type
+    const fileType = audioBlob.type && audioBlob.type !== '' ? audioBlob.type : 'audio/wav';
+    const file = new File([new Uint8Array(arrayBuffer)], 'voice-sample.wav', { type: fileType });
     
+    // Clone with stability mode for better results
     const response = await client.voices.clone(file, {
       name,
       description: `Voice clone of ${name}`,
-      mode: "stability", // Using stability mode as default
-      language: "en",    // Default to English
-      enhance: true      // Enable enhancement to improve quality
+      mode: "similarity",
+      language: "en",  
+      enhance: false   
     });
 
     console.log('Voice clone created successfully:', response);
+    
+    if (!response || !response.id) {
+      toast.error('Failed to create voice clone. No ID returned.');
+      return null;
+    }
+    
     return response.id;
   } catch (error) {
     console.error('Error cloning voice:', error);
@@ -38,6 +51,13 @@ export async function cloneVoice(audioBlob: Blob, name: string = 'My Voice Clone
     if (error instanceof CartesiaError) {
       errorMessage = `Error ${error.statusCode}: ${error.message}`;
       console.error('API error details:', error.body);
+      
+      // Provide more helpful error messages
+      if (error.statusCode === 400) {
+        errorMessage = 'Invalid audio file. Please try recording again.';
+      } else if (error.statusCode === 413) {
+        errorMessage = 'Audio file is too large. Please record a shorter clip.';
+      }
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }
@@ -54,10 +74,21 @@ interface GenerateSpeechParams {
 
 export async function generateSpeech({ voiceId, text }: GenerateSpeechParams): Promise<Blob | null> {
   try {
+    if (!text.trim()) {
+      toast.error('Please enter text to generate speech');
+      return null;
+    }
+    
+    // Limit text length for API compatibility
+    const trimmedText = text.trim().substring(0, 500);
+    if (trimmedText.length < text.trim().length) {
+      toast.info('Text was trimmed to 500 characters');
+    }
+    
     // Use the SDK to generate speech
     const audioBytes = await client.tts.bytes({
-      modelId: "sonic-2", // Using Sonic-2 model as default
-      transcript: text,
+      modelId: "sonic-2", // Using Sonic-2 model
+      transcript: trimmedText,
       voice: {
         mode: "id",
         id: voiceId,
@@ -90,6 +121,11 @@ export async function generateSpeech({ voiceId, text }: GenerateSpeechParams): P
 
 export async function getVoiceStatus(voiceId: string): Promise<string> {
   try {
+    if (!voiceId) {
+      console.error('No voice ID provided to check status');
+      return 'error';
+    }
+    
     // Use the SDK to check voice status
     const voice = await client.voices.get(voiceId);
     
@@ -107,6 +143,11 @@ export async function getVoiceStatus(voiceId: string): Promise<string> {
     
     if (error instanceof CartesiaError) {
       console.error('API error details:', error.body);
+      
+      // If voice not found (404), it means the clone doesn't exist
+      if (error.statusCode === 404) {
+        return 'not_found';
+      }
     }
     
     return 'error';
@@ -115,6 +156,8 @@ export async function getVoiceStatus(voiceId: string): Promise<string> {
 
 // Function to speak a welcome message after cloning
 export async function speakWelcomeMessage(voiceId: string): Promise<void> {
+  if (!voiceId) return;
+  
   const welcomeText = "Hello, your voice clone is ready! How do I sound?";
   try {
     const audioBlob = await generateSpeech({
@@ -123,12 +166,24 @@ export async function speakWelcomeMessage(voiceId: string): Promise<void> {
     });
     
     if (audioBlob) {
-      // Create an audio element and play it
+      // Create an audio element and play it with mobile-specific attributes
       const audio = new Audio(URL.createObjectURL(audioBlob));
-      audio.play().catch(err => {
-        console.error("Error playing welcome message:", err);
-        toast.error("Couldn't play welcome message. Try clicking somewhere on the page first.");
-      });
+      audio.setAttribute('playsinline', ''); // For iOS
+      audio.setAttribute('webkit-playsinline', ''); // For older iOS
+      
+      // Play with proper error handling for mobile
+      const playPromise = audio.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.error("Error playing welcome message:", err);
+          if (err.name === 'NotAllowedError') {
+            toast.error("Couldn't autoplay welcome message. Tap the screen and try again.");
+          } else {
+            toast.error("Couldn't play welcome message. Please try again.");
+          }
+        });
+      }
     }
   } catch (error) {
     console.error('Error speaking welcome message:', error);

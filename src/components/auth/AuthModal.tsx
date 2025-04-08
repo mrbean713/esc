@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -7,18 +6,18 @@ import {
 import AuthForm from './AuthForm';
 
 interface AuthModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ open, onOpenChange }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const handleSuccess = () => {
-    onOpenChange(false);
+    onClose();
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md max-w-[95vw] p-4 sm:p-6">
         <AuthForm onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>

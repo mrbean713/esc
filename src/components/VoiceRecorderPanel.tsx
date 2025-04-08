@@ -4,6 +4,7 @@ import WaveSurfer from 'wavesurfer.js';
 import { cloneVoice } from '@/services/cartesiaApi';
 import { toast } from 'sonner';
 import { RainbowButton } from '@/components/magicui/rainbow-button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface VoiceRecorderPanelProps {
   onAudioReady: (audioBlob: Blob) => void;
@@ -22,6 +23,7 @@ const VoiceRecorderPanel: React.FC<VoiceRecorderPanelProps> = ({
   const waveformRef = useRef<WaveSurfer | null>(null);
   const waveformDivRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (waveformDivRef.current) {
@@ -30,10 +32,10 @@ const VoiceRecorderPanel: React.FC<VoiceRecorderPanelProps> = ({
         waveColor: '#121212',
         progressColor: '#FF5252',
         cursorWidth: 0,
-        height: 80,
+        height: isMobile ? 40 : 80,
         normalize: true,
-        barWidth: 4,
-        barGap: 3,
+        barWidth: isMobile ? 1 : 4,
+        barGap: isMobile ? 1 : 3,
         barRadius: 0,
       });
 
@@ -47,7 +49,7 @@ const VoiceRecorderPanel: React.FC<VoiceRecorderPanelProps> = ({
         waveformRef.current.destroy();
       }
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (audioBlob) {
@@ -136,65 +138,69 @@ const VoiceRecorderPanel: React.FC<VoiceRecorderPanelProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-lg font-bold tracking-tighter">
+    <div className="space-y-2 md:space-y-6 w-full max-w-full overflow-hidden">
+      <div className="text-sm md:text-lg font-bold tracking-tighter">
         {isRecording ? "Recording in progress..." : "Record a voice clip"}
       </div>
       
       {isRecording ? (
         <RainbowButton 
           onClick={stopRecording} 
-          className="w-full px-6 py-4 font-white tracking-wide flex items-center justify-center gap-3 bg-red-500"
+          className="w-full px-4 py-2 md:px-6 md:py-4 font-white tracking-wide flex items-center justify-center gap-2 md:gap-3 bg-red-500 text-sm md:text-base"
         >
-          <Square className="w-6 h-6" />
-          Stop Recording
+          <span className="flex items-center gap-2">
+          <Square className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+          <span>Stop Recording</span>
+          </span>
         </RainbowButton>
       ) : (
         <RainbowButton 
           onClick={startRecording} 
-          className="w-full px-6 py-4 font-white tracking-wide flex items-center justify-center gap-3 bg-red-500"
+          className="w-full px-4 py-2 md:px-6 md:py-4 font-white tracking-wide flex items-center justify-center gap-2 md:gap-3 bg-red-500 text-sm md:text-base"
         >
-          <Mic className="w-6 h-6" />
-          Record
+          <span className="flex items-center gap-2">
+            <Mic className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+            <span>Record</span>
+          </span>
         </RainbowButton>
       )}
       
-      <div className="bg-gray-100 border-4 border-gray-100 rounded-xl p-4 font-bold text-center">
+      <div className="bg-gray-100 border border-gray-200 rounded-lg md:rounded-xl p-2 md:p-4 text-xs md:text-base font-bold text-center">
         {getRecommendedText()}
       </div>
       
       {audioBlob && (
-        <div className="space-y-6">
+        <div className="space-y-2 md:space-y-4 w-full max-w-full overflow-hidden">
           <div 
             ref={waveformDivRef} 
-            className="w-full border-4 border-gray-100 rounded-xl bg-white p-4"
+            className="w-full border border-gray-200 rounded-lg md:rounded-xl bg-white p-2 md:p-4"
           />
           
           <div className="flex justify-center">
             <button
-              className="border-4 border-gray-100 rounded-xl text-white px-6 py-3 font-black uppercase tracking-wide shadow-brutal hover:shadow-brutal-hover hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3"
+              className="bg-black border border-gray-200 rounded-lg md:rounded-xl text-white px-3 py-1 md:px-6 md:py-3 text-xs md:text-base font-bold uppercase tracking-wide flex items-center justify-center gap-1 md:gap-3"
               onClick={isPlaying ? stopAudio : playAudio}
             >
               {isPlaying ? (
                 <>
-                  <Square className="w-5 h-5" />
+                  <Square className="w-3 h-3 md:w-5 md:h-5" />
                   Stop
                 </>
               ) : (
                 <>
-                  <Play className="w-5 h-5" />
+                  <Play className="w-3 h-3 md:w-5 md:h-5" />
                   Play
                 </>
               )}
             </button>
           </div>
           
-          <div className="text-lg font-bold uppercase tracking-tighter mt-6">
-            Need something to read? Try this:
-          </div>
-          
-          <div className="bg-brutalist-green border-4 border-l-8 border-brutalist-black p-4 text-lg font-bold">
-            I'm recording audio to create an instant voice clone.
+          <div className="mt-3 md:mt-5 text-left">
+            <h4 className="text-xs md:text-sm font-bold uppercase mb-1 md:mb-2">Need something to read? Try this:</h4>
+            
+            <div className="bg-brutalist-green border-l-2 md:border-l-4 border-brutalist-black p-2 md:p-3 text-xs md:text-base font-medium">
+              I'm recording audio to create an instant voice clone.
+            </div>
           </div>
         </div>
       )}
