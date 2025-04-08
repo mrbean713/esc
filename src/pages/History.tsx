@@ -113,7 +113,7 @@ const History = () => {
       {/* Header */}
       <div className="p-6 border-b-4 flex items-center justify-between bg-white">
         <h1 className="text-4xl font-black uppercase tracking-tighter">
-          <a href="/">ESC Labs</a>
+          <a href="/">NESC Labs</a>
         </h1>
         <div className="flex gap-3">
           {user && (

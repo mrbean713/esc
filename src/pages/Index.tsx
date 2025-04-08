@@ -16,7 +16,7 @@ const Index = () => {
     <div className="min-h-screen bg-[#ffffff] flex flex-col px-2 sm:px-4 md:px-8 lg:px-20">
       {/* Header */}
       <div className="p-3 md:p-6 border-b border-gray-100 flex flex-col sm:flex-row items-center justify-between bg-white gap-3">
-        <h1 className="text-2xl md:text-4xl font-black uppercase tracking-tighter font-gascogne">ESC Labs</h1>
+        <h1 className="text-2xl md:text-4xl font-black uppercase tracking-tighter font-gascogne">NESC Labs</h1>
         <div className="flex gap-2 md:gap-3 flex-wrap justify-center sm:justify-end">
           {isLoading ? (
             <div className="h-10 w-32 bg-gray-200 animate-pulse rounded"></div>
