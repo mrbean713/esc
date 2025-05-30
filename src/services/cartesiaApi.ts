@@ -2,7 +2,7 @@ import { CartesiaClient, CartesiaError } from "@cartesia/cartesia-js";
 import { toast } from 'sonner';
 
 // This is a publishable API key
-const CARTESIA_API_KEY = 'sk_car_lijpob_Qp1Nwrr_wWo3ad';
+const CARTESIA_API_KEY = 'sk_car_NQAiuJweqvKRHodeVK4hVw';
 
 // Initialize the Cartesia client
 const client = new CartesiaClient({ apiKey: CARTESIA_API_KEY });
